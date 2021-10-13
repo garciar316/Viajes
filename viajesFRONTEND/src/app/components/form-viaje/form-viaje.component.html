@@ -1,0 +1,79 @@
+<div class="row justify-content-center align-items-center mt-4">
+  <div class="col-12">
+    <h1 class="text-center">{{ idViaje != null ? "Editar" : "Crear" }} viaje</h1>
+  </div>
+  <div class="col-auto border p-4" style="width: 40%">
+    <div *ngIf="sw" class="alert alert-success" role="alert">
+      Se han guardado los datos exitosamente.
+    </div>
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      No se puede asiganr más de 5 viajes, para el mismo día, en la misma ciudad
+    </div>
+    <form [formGroup]="viajeForm" (ngSubmit)="guardar()">
+      <div class="mb-3">
+        <label for="ciudad" class="form-label">
+          <em class="fas fa-map-marked-alt"></em> Destino
+        </label>
+        <select class="form-select" id="ciudad" formControlName="ciudad">
+          <option [ngValue]="ciudad" *ngFor="let ciudad of ciudades">
+            {{ ciudad.nombre }} ({{ ciudad.id }})
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="turista" class="form-label">
+          <em class="fas fa-hiking"></em> Turista
+        </label>
+        <select class="form-select" id="turista" formControlName="turista">
+          <option [ngValue]="turista" *ngFor="let turista of turistas">
+            {{ turista.nombre }} ({{ turista.id }})
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="fecha">
+          <em class="fas fa-calendar"></em> Fecha de viaje
+        </label>
+        <input
+          type="date"
+          class="form-control"
+          id="fecha"
+          formControlName="fecha"
+          min="2021-01-01"
+          max="2025-01-01"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="presupuesto">
+          <em class="fas fa-dollar-sign"></em> Presupuesto
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          id="presupuesto"
+          formControlName="presupuesto"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="tarjetaCredito" class="form-label">
+          <em class="fas fa-credit-card"></em> ¿Usa tarjeta de credito?
+        </label>
+        <select
+          class="form-select"
+          id="tarjetaCredito"
+          formControlName="tarjetaCredito"
+        >
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      <button
+        [disabled]="viajeForm.invalid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Guardar <em class="fas fa-save"></em>
+      </button>
+    </form>
+  </div>
+</div>

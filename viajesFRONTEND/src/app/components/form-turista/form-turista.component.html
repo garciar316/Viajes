@@ -1,0 +1,69 @@
+<div class="row justify-content-center align-items-center mt-4">
+  <div class="col-12">
+    <h1 class="text-center">{{ idTurista != null ? "Editar" : "Crear" }} Turista</h1>
+  </div>
+  <div class="col-auto border p-4" style="width: 40%">
+    <div *ngIf="sw" class="alert alert-success" role="alert">
+      Se han guardado los datos exitosamente.
+    </div>
+    <form [formGroup]="turistaForm" (ngSubmit)="guardar()">
+      <div class="mb-3">
+        <label for="id" class="form-label">
+          <em class="far fa-user"></em> Identificación
+        </label>
+        <input type="text" class="form-control" id="id" formControlName="id" />
+      </div>
+      <div class="mb-3">
+        <label for="tipoId">
+          <em class="far fa-id-card"></em> Tipo de identificación
+        </label>
+        <select class="form-select" id="tipoId" formControlName="tipoId">
+          <option value="CC">Cedula</option>
+          <option value="TI">Tarjeta de identidad</option>
+          <option value="PA">Pasaporte</option>
+          <option value="RC">Registro Civil</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">
+          <em class="far fa-signature"></em> Nombre
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          formControlName="nombre"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="fechaNacimiento" class="form-label">
+          <em class="far fa-calendar"></em> Fecha de nacimiento
+        </label>
+        <input
+          type="date"
+          class="form-control"
+          id="fechaNacimiento"
+          formControlName="fechaNacimiento"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="frecuencia" class="form-label">
+          <em class="far fa-clock"></em> Frecuencia de viaje (meses)
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          id="frecuencia"
+          formControlName="frecuencia"
+        />
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="turistaForm.invalid"
+      >
+        Guardar <em class="fas fa-save"></em>
+      </button>
+    </form>
+  </div>
+</div>

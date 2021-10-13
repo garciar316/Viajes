@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <h1 class="text-center">Turistas</h1>
+  <div>
+    <div>
+      <a [routerLink]="['crear']" class="btn btn-primary">
+        Crear nuevo <em class="fas fa-plus"></em>
+      </a>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Identificación</th>
+          <th scope="col">Tipo de identificación</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Fecha de nacimiento</th>
+          <th scope="col">Frecuencia</th>
+          <th scope="col">Eliminar</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Viajes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let turista of turistas
+              | paginate: { itemsPerPage: 6, currentPage: p }
+          "
+        >
+          <td>{{ turista.id }}</td>
+          <td>{{ turista.tipoId }}</td>
+          <td>{{ turista.nombre }}</td>
+          <td>
+            {{ turista.fechaNacimiento | date: "dd LLL yyyy":"UTC" }}
+          </td>
+          <td>{{ turista.frecuencia }}</td>
+          <td>
+            <a class="btn btn-danger" (click)="eliminar(turista)">
+              <em class="fas fa-trash"></em>
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-success" (click)="editar(turista.id)">
+              <em class="fas fa-edit"></em>
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-primary" (click)="verViajes(turista.id)">
+              <em class="fas fa-history"></em>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls
+      (pageChange)="p = $event"
+      previousLabel=" Anterior "
+      nextLabel=" Siguiente "
+    ></pagination-controls>
+  </div>
+</div>

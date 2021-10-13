@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <h1 class="text-center">Viajes</h1>
+  <div>
+    <div>
+      <a [routerLink]="['crear']" class="btn btn-primary">
+        Crear nuevo <em class="fas fa-plus"></em>
+      </a>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Destino</th>
+          <th scope="col">Turista</th>
+          <th scope="col">fecha</th>
+          <th scope="col">Presupuesto</th>
+          <th scope="col">Tarjeta de credito</th>
+          <th scope="col">Eliminar</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let viaje of viajes | paginate: { itemsPerPage: 6, currentPage: p }
+          "
+        >
+          <td>{{ viaje.id }}</td>
+          <td>{{ viaje.ciudad.nombre }}</td>
+          <td>{{ viaje.turista.nombre }}</td>
+          <td>{{ viaje.fecha | date: "EEE dd/MM/yyyy":"UTC" }}</td>
+          <td>{{ viaje.presupuesto }}</td>
+          <td>{{ viaje.tarjetaCredito ? "Sí" : "No" }}</td>
+          <td>
+            <a class="btn btn-danger" (click)="eliminar(viaje)">
+              <em class="fas fa-trash"></em>
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-success" (click)="editar(viaje)">
+              <em class="fas fa-edit"></em>
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-primary" (click)="detalles(viaje)">
+              <em class="fas fa-search-plus"></em>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls
+      (pageChange)="p = $event"
+      previousLabel=" Anterior "
+      nextLabel=" Siguiente "
+    ></pagination-controls>
+  </div>
+</div>

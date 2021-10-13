@@ -1,0 +1,65 @@
+<div class="row justify-content-center align-items-center mt-4">
+  <div class="col-12">
+    <h1 class="text-center">{{ idCiudad != null ? "Editar" : "Crear" }} Ciudad</h1>
+  </div>
+  <div class="col-auto border p-4" style="width: 40%">
+    <div *ngIf="sw" class="alert alert-success" role="alert">
+      Se han guardado los datos exitosamente.
+    </div>
+    <form [formGroup]="ciudadForm" (ngSubmit)="guardar()">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">
+          <em class="fas fa-signature"></em> Nombre
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          formControlName="nombre"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="cantHabitantes">
+          <em class="fas fa-users"></em> Cantidad de habitantes
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          id="cantHabitantes"
+          formControlName="cantHabitantes"
+          onKeyPress="if(this.value.length==9) return false;"
+          min="0"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="sitioMasVisitado" class="form-label">
+          <em class="far fa-star"></em> Sitio más visitado
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="sitioMasVisitado"
+          formControlName="sitioMasVisitado"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="hotelMasReservado" class="form-label">
+          <em class="fas fa-hotel"></em> Hotel más reservado
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="hotelMasReservado"
+          formControlName="hotelMasReservado"
+        />
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="ciudadForm.invalid"
+      >
+        Guardar <em class="fas fa-save"></em>
+      </button>
+    </form>
+  </div>
+</div>
