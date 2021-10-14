@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TuristaService } from 'src/app/services/turista.service';
+import { ViajeService } from 'src/app/services/viaje.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +11,11 @@ import { Router } from '@angular/router';
 export class TuristasComponent implements OnInit {
   turistas: any;
   p: number = 1;
-  constructor(private turistaService: TuristaService, private router: Router) {}
+  constructor(
+    private turistaService: TuristaService,
+    private viajeServices: ViajeService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.leerDatos();
@@ -26,24 +31,40 @@ export class TuristasComponent implements OnInit {
     );
   }
   eliminar(turista: any) {
-    let sw = window.confirm(
-      'Seguro que desea eliminar el registro ' + turista.id
-    );
-    if (sw) {
-      this.turistaService.deleteById(turista.id).subscribe(
-        (resp) => {
-          window.location.reload();
-        },
-        (error) => {
-          console.error(error);
+    this.viajeServices.getAllByTurista(turista.id).subscribe(
+      (data) => {
+        if (Object.keys(data).length == 0) {
+          let sw = window.confirm(
+            'Seguro que desea eliminar el registro ' + turista.id
+          );
+          if (sw) {
+            this.turistaService.deleteById(turista.id).subscribe(
+              (resp) => {
+                window.location.reload();
+              },
+              (error) => {
+                console.error(error);
+              }
+            );
+          }
+        } else {
+          this.error();
         }
-      );
-    }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
   editar(id: any) {
     this.router.navigate(['turistas/editar', id]);
   }
   verViajes(id: any) {
     this.router.navigate(['viajes/turista', id]);
+  }
+  error() {
+    window.alert(
+      'No se puede eliminar el turista, porque tiene viajes asociados'
+    );
   }
 }

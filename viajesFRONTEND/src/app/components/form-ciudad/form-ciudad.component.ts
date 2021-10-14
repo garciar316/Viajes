@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class FormCiudadComponent implements OnInit {
   ciudadForm!: FormGroup;
   idCiudad: any;
-  sw: boolean = false;
+  mensajes = { guardado: false, error: false };
   constructor(
     private formBuilder: FormBuilder,
     private ciudadService: CiudadService,
@@ -27,21 +27,21 @@ export class FormCiudadComponent implements OnInit {
       sitioMasVisitado: ['', Validators.required],
       hotelMasReservado: ['', Validators.required],
     });
-    this.editar();
+    this.cargarDatos();
   }
   guardar(): void {
-    this.sw = false;
+    this.mensajes.guardado = false;
     this.ciudadService.save(this.ciudadForm.value).subscribe(
       (resp) => {
         this.ciudadForm.reset();
-        this.sw = true;
+        this.mensajes.guardado = true;
       },
       (error) => {
         console.error(error);
       }
     );
   }
-  editar(): void {
+  cargarDatos(): void {
     this.idCiudad = this.route.snapshot.paramMap.get('id');
     if (this.idCiudad) {
       this.ciudadService.getById(this.idCiudad).subscribe(
@@ -56,6 +56,7 @@ export class FormCiudadComponent implements OnInit {
         },
         (error) => {
           console.error(error);
+          this.router.navigate(['inicio']);
         }
       );
     }

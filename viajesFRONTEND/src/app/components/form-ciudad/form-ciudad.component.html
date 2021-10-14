@@ -3,7 +3,7 @@
     <h1 class="text-center">{{ idCiudad != null ? "Editar" : "Crear" }} Ciudad</h1>
   </div>
   <div class="col-auto border p-4" style="width: 40%">
-    <div *ngIf="sw" class="alert alert-success" role="alert">
+    <div *ngIf="mensajes.guardado" class="alert alert-success" role="alert">
       Se han guardado los datos exitosamente.
     </div>
     <form [formGroup]="ciudadForm" (ngSubmit)="guardar()">

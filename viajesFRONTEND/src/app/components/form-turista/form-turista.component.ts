@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class FormTuristaComponent implements OnInit {
   turistaForm!: FormGroup;
   idTurista: any;
-  sw: boolean = false;
+  mensajes = { guardado: false, editar: false, error: false };
   constructor(
     private formBuilder: FormBuilder,
     private turistaService: TuristaService,
@@ -27,25 +27,30 @@ export class FormTuristaComponent implements OnInit {
       fechaNacimiento: ['', Validators.required],
       frecuencia: ['', Validators.required],
     });
-    this.editar();
+    this.cargarDatos();
   }
-  guardar(): void {
-    this.sw = false;
-    this.turistaService.save(this.turistaForm.value).subscribe(
+  validar(form: any): void {
+    this.mensajes.guardado = false;
+    this.mensajes.error = false;
+    this.turistaService.getById(form.value.id).subscribe(
       (resp) => {
-        this.turistaForm.reset();
-        this.sw = true;
+        if (Object.keys(resp).length != 0 && !this.mensajes.editar) {
+          this.mensajes.error = true;
+        } else {
+          this.guardar();
+        }
       },
       (error) => {
-        console.error(error);
+        error.status == 404 ? this.guardar() : console.error(error);
       }
     );
   }
-  editar(): void {
+  cargarDatos(): void {
     this.idTurista = this.route.snapshot.paramMap.get('id');
     if (this.idTurista) {
       this.turistaService.getById(this.idTurista).subscribe(
         (resp) => {
+          this.mensajes.editar = true;
           this.turistaForm.setValue({
             id: resp.id,
             tipoId: resp.tipoId,
@@ -56,8 +61,20 @@ export class FormTuristaComponent implements OnInit {
         },
         (error) => {
           console.error(error);
+          this.router.navigate(['inicio']);
         }
       );
     }
+  }
+  guardar() {
+    this.turistaService.save(this.turistaForm.value).subscribe(
+      (resp) => {
+        this.turistaForm.reset();
+        this.mensajes.guardado = true;
+      },
+      (_error) => {
+        console.error(_error);
+      }
+    );
   }
 }

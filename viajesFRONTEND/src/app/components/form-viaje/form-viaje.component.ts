@@ -21,6 +21,7 @@ export class FormViajeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private viajeService: ViajeService,
     private turistaService: TuristaService,
     private ciudadService: CiudadService
@@ -37,7 +38,7 @@ export class FormViajeComponent implements OnInit {
     });
     this.obtenerTuristas();
     this.obtenerCiudades();
-    this.editar();
+    this.cargarDatos();
   }
 
   guardar() {
@@ -78,7 +79,7 @@ export class FormViajeComponent implements OnInit {
     );
   }
 
-  editar() {
+  cargarDatos() {
     this.idViaje = this.route.snapshot.paramMap.get('id');
     if (this.idViaje) {
       this.viajeService.getById(this.idViaje).subscribe(
@@ -94,6 +95,7 @@ export class FormViajeComponent implements OnInit {
         },
         (error) => {
           console.error(error);
+          this.router.navigate(['inicio']);
         }
       );
     }

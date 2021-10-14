@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CiudadService } from 'src/app/services/ciudad.service';
 import { ViajeService } from 'src/app/services/viaje.service';
 import { Router } from '@angular/router';
+import { Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-ciudades',
@@ -32,19 +33,27 @@ export class CiudadesComponent implements OnInit {
     );
   }
   eliminar(ciudad: any) {
-    let sw = window.confirm(
-      'Seguro que desea eliminar el registro ' + ciudad.id
-    );
-    if (sw) {
-      this.ciudadesService.deleteById(ciudad.id).subscribe(
-        (resp) => {
-          window.location.reload();
-        },
-        (error) => {
-          console.error(error);
+    this.viajesService.getAllByCiudad(ciudad.id).subscribe(
+      (data) => {
+        if (Object.keys(data).length == 0) {
+          if (this.confirm(ciudad.id)) {
+            this.ciudadesService.deleteById(ciudad.id).subscribe(
+              (resp) => {
+                window.location.reload();
+              },
+              (error) => {
+                console.error(error);
+              }
+            );
+          }
+        } else {
+          this.error();
         }
-      );
-    }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
   editar(id: any) {
     this.router.navigate(['ciudades/editar', id]);
@@ -52,14 +61,14 @@ export class CiudadesComponent implements OnInit {
   verViajes(id: any) {
     this.router.navigate(['viajes/ciudad', id]);
   }
-  validarViajes(id: any) {
-    this.viajesService.getAllByCiudad(id).subscribe(
-      (resp) => {
-        this.viajes = resp;
-      },
-      (error) => {
-        console.error(error);
-      }
+  error() {
+    return window.alert(
+      'No se puede eliminar la ciudad, porque tiene algunos viajes asociados'
+    );
+  }
+  confirm(dato: any) {
+    return window.confirm(
+      'Seguro que desea eliminar el registro ' + dato + '?'
     );
   }
 }
